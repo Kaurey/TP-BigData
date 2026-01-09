@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: bigdata_db
+    volumes:
+      - ./postgres_init:/docker-entrypoint-initdb.d
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - bigdata-net
+
+  spark:
+    build: .
+    depends_on:
+      - postgres
+    volumes:
+      - ./data:/app/data
+      - ./src:/app/src
+    environment:
+      SPARK_CLASSPATH: /opt/postgresql-42.6.0.jar
+    command: python src/etl.py
+    networks:
+      - bigdata-net
+
+  streamlit:
+    build: .
+    depends_on:
+      - spark # Wait for ETL to start (though ideally wait for completion, in this simple setup we just start after)
+    volumes:
+      - ./data:/app/data
+      - ./src:/app/src
+    ports:
+      - "8501:8501"
+    command: streamlit run src/app.py --server.address=0.0.0.0
+    networks:
+      - bigdata-net
+
+volumes:
+  postgres_data:
+
+networks:
+  bigdata-net:
