@@ -1,4 +1,4 @@
-# TP Big Data v4
+# TP Big Data
 
 Ce projet implémente une architecture Big Data complète de bout en bout ("End-to-End"), de l'ingestion à la visualisation.
 
@@ -46,3 +46,7 @@ Ce projet implémente une architecture Big Data complète de bout en bout ("End-
 *   `data/` : Contient les données (raw, bronze, silver, gold).
 *   `src/` : Scripts Python (`etl.py`, `app.py`).
 *   `postgres_init/` : Script d'initialisation SQL.
+
+## Lien du diaporama
+
+https://gamma.app/docs/TP-Architecture-Big-Data-r4vkhda19k23h7a?mode=doc
